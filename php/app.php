@@ -101,7 +101,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Commit transaction
             $pdo->commit();
-            echo "Ticket reserved successfully! Your seat number is $seat_number.";
+
+            // Redirect to cart.php with the ticket ID and event ID
+            header("Location: cart.php?ticket_id=" . $pdo->lastInsertId() . "&event_id=" . $event_id);
+            exit(); // Ensure no further code is executed after redirection
         } catch (Exception $e) {
             $pdo->rollBack();
             die("Reservation failed: " . $e->getMessage());
@@ -109,4 +112,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
-

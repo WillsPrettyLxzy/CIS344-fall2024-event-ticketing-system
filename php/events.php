@@ -4,12 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/styles.css">
+    <link rel="stylesheet" href="event_styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- For icons -->
     <title>Event Ticketing</title>
 </head>
 <body>
     <header>
-        <h1>Available Events</h1>
+        <div class="header-container">
+            <h1>Available Events</h1>
+            <a href="cart.php" class="view-cart-button">
+                <i class="fas fa-shopping-cart"></i> View Cart
+            </a>
+        </div>
     </header>
 
     <main>
@@ -19,38 +25,25 @@
         $events = $stmt->fetchAll();
 
         if ($events): ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Event Name</th>
-                        <th>Date</th>
-                        <th>Location</th>
-                        <th>Available Seats</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($events as $event): ?>
-                        <tr>
-                            <td><?= htmlspecialchars($event['event_name']); ?></td>
-                            <td><?= htmlspecialchars($event['event_date']); ?></td>
-                            <td><?= htmlspecialchars($event['event_location']); ?></td>
-                            <td><?= $event['available_seats']; ?></td>
-                            <td>
-                                <form method="POST" action="app.php">
-                                    <input type="hidden" name="event_id" value="<?= $event['event_id']; ?>">
-                                    <button type="submit" name="reserve_ticket">Reserve Ticket</button>
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+            <div class="event-list">
+                <?php foreach ($events as $event): ?>
+                    <div class="event-card">
+                        <div class="event-info">
+                            <h2><?= htmlspecialchars($event['event_name']); ?></h2>
+                            <p><strong>Date:</strong> <?= htmlspecialchars($event['event_date']); ?></p>
+                            <p><strong>Location:</strong> <?= htmlspecialchars($event['event_location']); ?></p>
+                            <p><strong>Available Seats:</strong> <?= $event['available_seats']; ?></p>
+                        </div>
+                        <form method="POST" action="app.php" class="reserve-form">
+                            <input type="hidden" name="event_id" value="<?= $event['event_id']; ?>">
+                            <button type="submit" name="reserve_ticket">Reserve Ticket</button>
+                        </form>
+                    </div>
+                <?php endforeach; ?>
+            </div>
         <?php else: ?>
             <p>No events available at the moment.</p>
         <?php endif; ?>
-        <a href="cart.php">View Cart</a>
-
     </main>
 </body>
 </html>

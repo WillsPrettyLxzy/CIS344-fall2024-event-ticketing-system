@@ -1,5 +1,4 @@
 <?php
-session_start();
 require 'app.php'; // Include database connection and logic
 
 // Ensure user is logged in
@@ -65,49 +64,63 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart</title>
+    <link rel="stylesheet" href="cart_styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- For icons -->
+    <title>Your Cart</title>
 </head>
 <body>
-    <h1>Your Cart</h1>
-    <?php if (count($tickets) > 0): ?>
-        <form method="POST" action="cart.php">
-            <table border="1">
-                <tr>
-                    <th>Event Name</th>
-                    <th>Event Date</th>
-                    <th>Location</th>
-                    <th>Seat Number</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-                <?php foreach ($tickets as $ticket): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($ticket['event_name']) ?></td>
-                        <td><?= htmlspecialchars($ticket['event_date']) ?></td>
-                        <td><?= htmlspecialchars($ticket['event_location']) ?></td>
-                        <td><?= htmlspecialchars($ticket['seat_number']) ?></td>
-                        <td><?= htmlspecialchars($ticket['payment_status']) ?></td>
-                        <td>
-                            <?php if ($ticket['payment_status'] === 'pending'): ?>
-                                <form method="POST" action="cart.php">
-                                    <input type="hidden" name="ticket_id" value="<?= $ticket['ticket_id'] ?>">
-                                    <button type="submit" name="remove_ticket">Remove</button>
-                                </form>
-                            <?php else: ?>
-                                <em>Purchased</em>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </table>
-            <?php if (array_search('pending', array_column($tickets, 'payment_status')) !== false): ?>
-                <button type="submit" name="checkout">Checkout</button>
-            <?php endif; ?>
-        </form>
-    <?php else: ?>
-        <p>Your cart is empty!</p>
-    <?php endif; ?>
+    <header>
+        <div class="header-container">
+            <h1>Your Cart</h1>
+            <a href="events.php" class="back-to-events">Back to Events</a>
+        </div>
+    </header>
 
-    <a href="events.php">Back to Events</a>
+    <main>
+        <?php if (count($tickets) > 0): ?>
+            <div class="cart-table-container">
+                <form method="POST" action="cart.php">
+                    <table class="cart-table">
+                        <thead>
+                            <tr>
+                                <th>Event Name</th>
+                                <th>Event Date</th>
+                                <th>Location</th>
+                                <th>Seat Number</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($tickets as $ticket): ?>
+                                <tr>
+                                    <td><?= htmlspecialchars($ticket['event_name']) ?></td>
+                                    <td><?= htmlspecialchars($ticket['event_date']) ?></td>
+                                    <td><?= htmlspecialchars($ticket['event_location']) ?></td>
+                                    <td><?= htmlspecialchars($ticket['seat_number']) ?></td>
+                                    <td><?= htmlspecialchars($ticket['payment_status']) ?></td>
+                                    <td>
+                                        <?php if ($ticket['payment_status'] === 'pending'): ?>
+                                            <form method="POST" action="cart.php" class="remove-ticket-form">
+                                                <input type="hidden" name="ticket_id" value="<?= $ticket['ticket_id'] ?>">
+                                                <button type="submit" name="remove_ticket" class="remove-ticket-button">Remove</button>
+                                            </form>
+                                        <?php else: ?>
+                                            <em>Purchased</em>
+                                        <?php endif; ?>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <?php if (array_search('pending', array_column($tickets, 'payment_status')) !== false): ?>
+                        <button type="submit" name="checkout" class="checkout-button">Checkout</button>
+                    <?php endif; ?>
+                </form>
+            </div>
+        <?php else: ?>
+            <p>Your cart is empty!</p>
+        <?php endif; ?>
+    </main>
 </body>
 </html>

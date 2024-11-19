@@ -29,8 +29,6 @@
         </form>
     </main>
 
-    <a href="events.php">View Events</a>
-
     <script src="assets/scripts.js"></script>
 </body>
 </html>
