@@ -1,8 +1,10 @@
--- CREATE DATABASE ticket_sales;
+-- Create Database
+CREATE DATABASE IF NOT EXISTS ticket_sales;
 
 USE ticket_sales;
 
-CREATE TABLE users (
+-- Users Table
+CREATE TABLE IF NOT EXISTS users (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -10,7 +12,8 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE events (
+-- Events Table
+CREATE TABLE IF NOT EXISTS events (
     event_id INT AUTO_INCREMENT PRIMARY KEY,
     event_name VARCHAR(100) NOT NULL,
     event_date DATE NOT NULL,
@@ -20,13 +23,13 @@ CREATE TABLE events (
 );
 
 -- Tickets Table
-CREATE TABLE tickets (
+CREATE TABLE IF NOT EXISTS tickets (
     ticket_id INT AUTO_INCREMENT PRIMARY KEY,
     event_id INT NOT NULL,
     user_id INT NOT NULL,
     seat_number INT NOT NULL,
     purchase_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    payment_status ENUM('pending', 'paid') DEFAULT 'pending',
+    payment_status ENUM('pending', 'purchased') DEFAULT 'pending', -- Fixed ENUM values
     FOREIGN KEY (event_id) REFERENCES events(event_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
