@@ -49,6 +49,8 @@
         <?php else: ?>
             <p>No events available at the moment.</p>
         <?php endif; ?>
+        <a href="cart.php">View Cart</a>
+
     </main>
 </body>
 </html>

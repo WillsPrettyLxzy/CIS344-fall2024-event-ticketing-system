@@ -1,5 +1,5 @@
 <?php
-// Start session at the beginning
+// Start session at the very beginning of the file
 session_start();
 
 // Database connection
@@ -14,6 +14,8 @@ try {
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
 }
+
+$login_message = '';  // Initialize the login message variable
 
 // Routes and logic for form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -43,13 +45,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $user = $stmt->fetch();
 
             if ($user && password_verify($password, $user['password'])) {
-                $_SESSION['user_id'] = $user['user_id'];
-                echo "Login successful!";
+                // Successful login
+                $_SESSION['user_id'] = $user['user_id']; // Store user_id in session
+                $login_message = "Login successful!"; // Set the login success message
+
+                // Redirect to tickets page after setting the message
+                header("Location: events.php");
+                exit(); // Ensure no further code is executed after redirection
             } else {
-                echo "Invalid credentials!";
+                // Failed login
+                $login_message = "Invalid credentials!"; // Set the login failure message
             }
         } catch (Exception $e) {
-            die("Error during login: " . $e->getMessage());
+            $login_message = "Error during login: " . $e->getMessage();
         }
     }
 
@@ -101,3 +109,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
